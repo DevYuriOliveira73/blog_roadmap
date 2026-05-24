@@ -1,12 +1,12 @@
 import {Router} from 'express';
-import {createUser} from "../controllers/user/create.js"
+import {singUpUser} from "../controllers/user/signUp.js"
 
 
 const router = Router()
 
 
 router.route("/user")
-  .post( createUser )
+  .post( singUpUser )
 //   .get( getClientes )
 
 // router.route("/cliente/:id")
