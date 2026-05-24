@@ -9,6 +9,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "docker:up": "docker start blog",
+    "docker:down": "docker stop blog",
     "build": "tsc",
     "start": "node dist/index.js"
   },
