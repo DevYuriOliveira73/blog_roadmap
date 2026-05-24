@@ -1,17 +1,11 @@
 import {Router} from 'express';
-import {singUpUser} from "../controllers/user/signUp.js"
-
+import {signUpUser} from "../controllers/user/signUp.js"
+import {signInUser} from "../controllers/user/signIn.js"
 
 const router = Router()
 
 
-router.route("/user")
-  .post( singUpUser )
-//   .get( getClientes )
-
-// router.route("/cliente/:id")
-//   .get( getClienteById )
-//   .delete( deleteCliente )
-//   .patch( updateCliente )
+router.post("/auth/register", signUpUser )
+router.post("/auth/login", signInUser )
 
 export default router

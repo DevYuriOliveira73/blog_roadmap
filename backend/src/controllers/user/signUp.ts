@@ -11,7 +11,7 @@ const schema = z.object({
 })
 
 
-export const singUpUser = async (req: Request, res: Response) => {
+export const signUpUser = async (req: Request, res: Response) => {
   try {
     const SALT_ROUNDS = 10
     const {email, name, password} = schema.parse(req.body as UserType)
