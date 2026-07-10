@@ -5,10 +5,9 @@ const app = express()
 app.use(express.json())
 
 //routes import
-import userRouter from "./routes/user.route.js"
+import router from "./routes/index.js"
 
 //routes declaration
-app.use('/api', userRouter)
-
+app.use('/api', router)
 
 export default app;
