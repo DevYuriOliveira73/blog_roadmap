@@ -1,10 +1,8 @@
-import { Router } from 'express'
-import authRouter from './auth.route.js'
-import artigoRouter from './artigo.route.js'
+import { Router } from "express";
+import taskRoutes from "./task.routes.js";
 
-const router = Router()
+const router = Router();
 
-router.use('/auth', authRouter)
-router.use('/artigos', artigoRouter)
+router.use("/tasks", taskRoutes);
 
-export default router
+export default router;
