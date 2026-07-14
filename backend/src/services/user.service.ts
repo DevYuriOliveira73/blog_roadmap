@@ -1,6 +1,7 @@
 import {CreateUserDTO} from "../dtos/user.dto"
 import * as userRepository from "../repositories/user/user.repository"
 import { UserResponseDTO } from "../dtos/user.dto"
+import { removePasswordFromArray } from "../utils/remove-password-user"
 
 export async function createUserService(data : CreateUserDTO) : Promise<UserResponseDTO> {
 
@@ -12,7 +13,7 @@ export async function createUserService(data : CreateUserDTO) : Promise<UserResp
     throw new Error("Nome é obrigatório!");
   }
 
-  const existingUser = await userRepository.findUserByEmail(data.email);
+  const existingUser = await userRepository.findByEmail(data.email);
   if (existingUser) {
     throw new Error("Usuário já existe!");
   }
@@ -30,10 +31,19 @@ export async function getAllUsersService(): Promise<UserResponseDTO[] | null> {
     return null;
   }
 
-  const usersWhitoutPassword = users.map(user =>{
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword;
-  })
+  const usersWhitoutPassword = removePasswordFromArray(users);
 
   return usersWhitoutPassword;
 }
+
+export async function searchByEmailLikeService(term: string): Promise<UserResponseDTO[] | null> {
+
+  if (term.trim().length === 0) {
+    throw new Error("Termo de busca é obrigatório");
+  }
+
+  const users = await userRepository.fingByEmailLike(term);
+
+  return removePasswordFromArray(users);
+}
+

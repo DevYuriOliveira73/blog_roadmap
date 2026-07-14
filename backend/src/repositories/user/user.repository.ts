@@ -19,7 +19,7 @@ export async function createUserRepository({email, name, password}: CreateUserDT
   }
 }
 
-export async function findUserByEmail(email: string) {
+export async function findByEmail(email: string) {
   const user = await prisma.user.findUnique({
     where: { email: email }
   })
@@ -29,5 +29,18 @@ export async function findUserByEmail(email: string) {
 
 export async function getAllUsersRepository() {
   const users = await prisma.user.findMany();
+  return users;
+}
+
+export async function fingByEmailLike(term: string) {
+  const users = await prisma.user.findMany({
+    where: {
+      email: {
+        contains: term,
+        mode: "insensitive"
+      }
+    }
+  })
+
   return users;
 }

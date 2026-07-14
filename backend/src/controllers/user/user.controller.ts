@@ -9,7 +9,7 @@ export async function createUserController(req: Request, res: Response) {
     const {email,name, password} = req.body as CreateUserDTO
     const user = await userService.createUserService({email, name, password})
 
-    res.status(201).json({message: `User ${user} created successfully`, user})
+    res.status(201).json({message: `User ${user.name} created successfully`, user})
 
   } catch (error) {
 
@@ -25,5 +25,17 @@ export async function getAllUsersController(req: Request, res: Response) {
     res.status(200).json(users);
   } catch (error) {
     res.status(400).json({message: "Error fetching users", error})
+  }
+}
+
+export async function searchByEmailLikeController(req: Request, res: Response) {
+  try {
+    const { email : term } = req.query;
+    const users = await userService.searchByEmailLikeService(term as string);
+    res.status(200).json(users);
+  } catch (error) {
+
+    res.status(400).json({message: "Error searching user", error})
+
   }
 }

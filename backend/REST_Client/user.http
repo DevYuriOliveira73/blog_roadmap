@@ -3,10 +3,14 @@ POST http://localhost:3001/api/users/register
 Content-Type: application/json
 
 {
-  "email": "teste1@teste.com",
-  "name": "Vitor Xaver",
+  "email": "brutos.jj@apple.com",
+  "name": "Vitor Brutos",
   "password": "123456"
 }
 
 ### Listar usuários
 GET http://localhost:3001/api/users
+
+
+### Buscar usuários por trecho de email
+GET http://localhost:3001/api/users/search-email?email=teste
