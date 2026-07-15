@@ -67,6 +67,17 @@ export async function updatePostRepository(idUser: number, idPost: number, data:
   return post;
 }
 
+export async function getPostByIdRepository(idUser: number, idPost: number) {
+  const post = await prisma.post.findUniqueOrThrow({
+    where: {
+      id: idPost,
+      authorId: idUser
+    },
+  });
+  return post;
+}
+
+
 // export async function fingByEmailLike(term: string) {
 //   const users = await prisma.user.findMany({
 //     where: {

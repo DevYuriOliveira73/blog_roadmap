@@ -1,7 +1,7 @@
 @baseUrl = http://localhost:3001/api
 
 @userId = 2
-@postId = 11
+@postId = 12
 
 ### =========================================
 ### POSTS - Criar post (aninhado no usuário)
@@ -42,7 +42,10 @@ Content-Type: application/json
   "published": true
 }
 
-
+### =========================================
+### GET - Buscar por id do post (aninhado no usuário)
+### =========================================
+GET {{baseUrl}}/users/{{userId}}/posts/{{postId}}
 
 
 

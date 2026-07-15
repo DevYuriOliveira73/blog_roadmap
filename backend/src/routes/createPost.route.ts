@@ -7,6 +7,7 @@ const router = Router()
 
 router.post('/:idUser/posts', validate(createPostSchema), PostController.createPostController)
 router.get('/:idUser/posts', PostController.getAllPostsController)
+router.get('/:idUser/posts/:idPost', PostController.getPostByIdController)
 router.delete('/:idUser/posts/:idPost', PostController.deletePostController)
 router.patch('/:idUser/posts/:idPost', PostController.updatePostController)
 

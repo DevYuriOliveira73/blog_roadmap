@@ -28,7 +28,12 @@ export async function findByEmail(email: string) {
 
 
 export async function getAllUsersRepository() {
-  const users = await prisma.user.findMany();
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+  }});
   return users;
 }
 

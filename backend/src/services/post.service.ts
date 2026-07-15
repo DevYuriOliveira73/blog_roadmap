@@ -26,3 +26,9 @@ export async function updatePostService(idUser: number, idPost: number, data: Pa
   return await postRepository.updatePostRepository(idUser, idPost, data);
 
 }
+
+export async function getPostByIdService(idUser: number, idPost: number) : Promise<any> {
+
+  return await postRepository.getPostByIdRepository(idUser, idPost)
+
+}
