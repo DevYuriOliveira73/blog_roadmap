@@ -1,5 +1,8 @@
+@baseUrl = http://localhost:3001/api
+@term = .com
+
 ### Criar usuário
-POST http://localhost:3001/api/users/register
+POST {{baseUrl}}/users/register
 Content-Type: application/json
 
 {
@@ -9,8 +12,9 @@ Content-Type: application/json
 }
 
 ### Listar usuários
-GET http://localhost:3001/api/users
+GET {{baseUrl}}/users
 
 
 ### Buscar usuários por trecho de email
-GET http://localhost:3001/api/users/search-email?email=teste
+GET {{baseUrl}}/users/search-email
+  ?email={{term}}
