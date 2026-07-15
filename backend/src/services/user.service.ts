@@ -31,9 +31,8 @@ export async function getAllUsersService(): Promise<UserResponseDTO[] | null> {
     return null;
   }
 
-  const usersWhitoutPassword = removePasswordFromArray(users);
 
-  return usersWhitoutPassword;
+  return users;
 }
 
 export async function searchByEmailLikeService(term: string): Promise<UserResponseDTO[] | null> {
@@ -44,6 +43,6 @@ export async function searchByEmailLikeService(term: string): Promise<UserRespon
 
   const users = await userRepository.fingByEmailLike(term);
 
-  return removePasswordFromArray(users);
+  return users
 }
 

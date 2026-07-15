@@ -1,6 +1,7 @@
 import {Request, Response} from "express"
 import {CreatePostDTO} from "../../dtos/post.dto"
 import * as postService from "../../services/post.service"
+import { getParams } from "../../utils/getParams"
 
 export async function createPostController(req: Request, res: Response) {
 
@@ -20,15 +21,32 @@ export async function createPostController(req: Request, res: Response) {
 
 export async function getAllPostsController(req: Request, res: Response) {
   try {
-    const idUser = req.params.idUser;
-    const idUserNumber = Number(idUser);
+    const { idUser } = getParams(req);
 
-    const posts = await postService.getAllPostsService(idUserNumber)
+    const posts = await postService.getAllPostsService(idUser)
 
     res.status(200).json(posts)
 
   } catch (error) {
     res.status(400).json({message: "Error getting posts", error})
+  }
+}
+
+
+export async function deletePostController(req: Request, res: Response) {
+  try {
+    const { idUser, idPost } = getParams(req);
+
+    if (idPost === undefined) {
+      res.status(400).json({message: "idPost is required"})
+      return
+    }
+
+    const post = await postService.deletePostService(idUser, idPost)
+
+    res.status(200).json({message: `Post ${post.title} deleted successfully`, post})
+  } catch (error) {
+    res.status(400).json({message: "Error deleting post", error})
   }
 }
 

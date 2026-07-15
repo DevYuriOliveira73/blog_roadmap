@@ -14,3 +14,10 @@ export async function getAllPostsService(id: number) : Promise<any> {
 }
 
 
+export async function deletePostService(idUser: number, idPost: number) : Promise<any> {
+
+  return await postRepository.deletePostRepository(idUser, idPost)
+
+}
+
+

@@ -37,6 +37,21 @@ export async function getAllPostsRepository(id: number) {
   return posts;
 }
 
+export async function deletePostRepository(idUser: number, idPost: number) {
+  const post = await prisma.post.delete({
+    where: {
+      id: idPost,
+      authorId: idUser
+    },
+    select: {
+      id: true,
+      title: true
+    }
+  })
+
+  return post;
+}
+
 // export async function fingByEmailLike(term: string) {
 //   const users = await prisma.user.findMany({
 //     where: {

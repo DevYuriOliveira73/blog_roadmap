@@ -1,7 +1,7 @@
 @baseUrl = http://localhost:3001/api
 
 @userId = 3
-@postId = 1
+@postId = 7
 
 ### =========================================
 ### POSTS - Criar post (aninhado no usuário)
@@ -23,8 +23,10 @@ GET {{baseUrl}}/users/{{userId}}/posts
 
 
 
-
-
+### =========================================
+### DELETE - Deletar
+### =========================================
+DELETE {{baseUrl}}/users/{{userId}}/posts/{{postId}}
 
 
 
