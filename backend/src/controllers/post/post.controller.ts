@@ -18,14 +18,19 @@ export async function createPostController(req: Request, res: Response) {
 
 }
 
-// export async function getAllUsersController(req: Request, res: Response) {
-//   try {
-//     const users = await userService.getAllUsersService();
-//     res.status(200).json(users);
-//   } catch (error) {
-//     res.status(400).json({message: "Error fetching users", error})
-//   }
-// }
+export async function getAllPostsController(req: Request, res: Response) {
+  try {
+    const idUser = req.params.idUser;
+    const idUserNumber = Number(idUser);
+
+    const posts = await postService.getAllPostsService(idUserNumber)
+
+    res.status(200).json(posts)
+
+  } catch (error) {
+    res.status(400).json({message: "Error getting posts", error})
+  }
+}
 
 // export async function searchByEmailLikeController(req: Request, res: Response) {
 //   try {

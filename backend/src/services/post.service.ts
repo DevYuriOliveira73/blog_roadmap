@@ -7,4 +7,10 @@ export async function createPostService(data : CreatePostDTO) : Promise<PostResp
 
 }
 
+export async function getAllPostsService(id: number) : Promise<any> {
+
+  return await postRepository.getAllPostsRepository(id)
+
+}
+
 

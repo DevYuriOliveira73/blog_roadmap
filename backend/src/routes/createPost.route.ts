@@ -6,6 +6,7 @@ import { validate } from '../middleware/validation.middleware';
 const router = Router()
 
 router.post('/:idUser/posts', validate(createPostSchema), PostController.createPostController)
+router.get('/:idUser/posts', PostController.getAllPostsController)
 
 
 export default router;

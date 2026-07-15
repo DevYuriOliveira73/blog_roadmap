@@ -28,10 +28,14 @@ export async function createPostRepository(data: CreatePostDTO) : Promise<PostRe
 // }
 
 
-// export async function getAllUsersRepository() {
-//   const users = await prisma.user.findMany();
-//   return users;
-// }
+export async function getAllPostsRepository(id: number) {
+  const posts = await prisma.post.findMany({
+    where: {
+      authorId: id
+    }
+  });
+  return posts;
+}
 
 // export async function fingByEmailLike(term: string) {
 //   const users = await prisma.user.findMany({

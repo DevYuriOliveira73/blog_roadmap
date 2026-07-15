@@ -17,9 +17,21 @@ Content-Type: application/json
 }
 
 ### =========================================
-### POSTS - Listar todos
+### GET - Listar todos
 ### =========================================
-GET {{baseUrl}}/posts
+GET {{baseUrl}}/users/{{userId}}/posts
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### =========================================
 ### POSTS - Buscar por termo (query param)
