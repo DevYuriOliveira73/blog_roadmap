@@ -1,0 +1,69 @@
+@baseUrl = http://localhost:3001/api
+
+@userId = 3
+@postId = 1
+
+### =========================================
+### POSTS - Criar post (aninhado no usuário)
+### =========================================
+POST {{baseUrl}}/users/{{userId}}/posts
+Content-Type: application/json
+
+{
+  "title": "Ponte do Ceu",
+  "content": "Aqui irei falar um pouco sobre a ponte do ceu",
+  "category": "imaginação",
+  "tags": ["sonho"]
+}
+
+### =========================================
+### POSTS - Listar todos
+### =========================================
+GET {{baseUrl}}/posts
+
+### =========================================
+### POSTS - Buscar por termo (query param)
+### =========================================
+GET {{baseUrl}}/posts?term=typescript
+
+### =========================================
+### POSTS - Buscar por id
+### =========================================
+GET {{baseUrl}}/posts/{{postId}}
+
+### =========================================
+### POSTS - Atualizar (PUT - substitui o recurso inteiro)
+### =========================================
+PUT {{baseUrl}}/posts/{{postId}}
+Content-Type: application/json
+
+{
+  "title": "Meu primeiro post (editado)",
+  "content": "Conteúdo atualizado",
+  "category": "tecnologia",
+  "tags": ["node", "express"],
+  "published": true
+}
+
+### =========================================
+### POSTS - Deletar
+### =========================================
+DELETE {{baseUrl}}/posts/{{postId}}
+
+### =========================================
+### POSTS - Casos de erro (pra testar a validação Zod)
+### =========================================
+
+### title vazio -> deve retornar 400
+POST {{baseUrl}}/users/{{userId}}/posts
+Content-Type: application/json
+
+{
+  "title": "",
+  "content": "Conteúdo válido",
+  "category": "tecnologia",
+  "tags": []
+}
+
+### id inexistente -> deve retornar 404
+GET {{baseUrl}}/posts/999999
