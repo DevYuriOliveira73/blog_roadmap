@@ -1,7 +1,7 @@
 @baseUrl = http://localhost:3001/api
 
-@userId = 3
-@postId = 7
+@userId = 2
+@postId = 11
 
 ### =========================================
 ### POSTS - Criar post (aninhado no usuário)
@@ -10,8 +10,8 @@ POST {{baseUrl}}/users/{{userId}}/posts
 Content-Type: application/json
 
 {
-  "title": "Ponte do Ceu",
-  "content": "Aqui irei falar um pouco sobre a ponte do ceu",
+  "title": "Harry Potter 5",
+  "content": "Bla1 bla2 bbblaa",
   "category": "imaginação",
   "tags": ["sonho"]
 }
@@ -29,6 +29,19 @@ GET {{baseUrl}}/users/{{userId}}/posts
 DELETE {{baseUrl}}/users/{{userId}}/posts/{{postId}}
 
 
+### =========================================
+### PATCH - Atualizar (PUT - substitui o recurso inteiro)
+### =========================================
+PATCH {{baseUrl}}/users/{{userId}}/posts/{{postId}}
+Content-Type: application/json
+
+{
+  "title": "Harry Potter 3 (editado)",
+  "category": "imaginação",
+  "tags": ["imaginacao", "magia"],
+  "published": true
+}
+
 
 
 
@@ -45,24 +58,7 @@ GET {{baseUrl}}/posts?term=typescript
 ### =========================================
 GET {{baseUrl}}/posts/{{postId}}
 
-### =========================================
-### POSTS - Atualizar (PUT - substitui o recurso inteiro)
-### =========================================
-PUT {{baseUrl}}/posts/{{postId}}
-Content-Type: application/json
 
-{
-  "title": "Meu primeiro post (editado)",
-  "content": "Conteúdo atualizado",
-  "category": "tecnologia",
-  "tags": ["node", "express"],
-  "published": true
-}
-
-### =========================================
-### POSTS - Deletar
-### =========================================
-DELETE {{baseUrl}}/posts/{{postId}}
 
 ### =========================================
 ### POSTS - Casos de erro (pra testar a validação Zod)

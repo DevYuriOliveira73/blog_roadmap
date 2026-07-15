@@ -21,3 +21,8 @@ export async function deletePostService(idUser: number, idPost: number) : Promis
 }
 
 
+export async function updatePostService(idUser: number, idPost: number, data: Partial<CreatePostDTO>) {
+
+  return await postRepository.updatePostRepository(idUser, idPost, data);
+
+}

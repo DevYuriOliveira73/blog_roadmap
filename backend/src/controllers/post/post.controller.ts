@@ -50,6 +50,28 @@ export async function deletePostController(req: Request, res: Response) {
   }
 }
 
+export async function updatePostController(req: Request, res: Response) {
+  try {
+    const { idUser, idPost } = getParams(req);
+
+    if (idPost === undefined) {
+      res.status(400).json({message: "idPost is required"})
+      return
+    }
+
+    const post = await postService.updatePostService(idUser, idPost, req.body);
+
+    res.status(200).json({message: `Post ${post.title} updated successfully`, post});
+
+  } catch (error) {
+
+    res.status(400).json({message: "Error updating post", error});
+
+  }
+}
+
+
+
 // export async function searchByEmailLikeController(req: Request, res: Response) {
 //   try {
 //     const { email : term } = req.query;

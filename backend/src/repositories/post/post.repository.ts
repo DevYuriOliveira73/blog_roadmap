@@ -52,6 +52,21 @@ export async function deletePostRepository(idUser: number, idPost: number) {
   return post;
 }
 
+
+export async function updatePostRepository(idUser: number, idPost: number, data: Partial<CreatePostDTO>) {
+  const post = await prisma.post.update({
+    where: {
+      id: idPost,
+      authorId: idUser
+    },
+    data: {
+      ...data
+    }
+  })
+
+  return post;
+}
+
 // export async function fingByEmailLike(term: string) {
 //   const users = await prisma.user.findMany({
 //     where: {

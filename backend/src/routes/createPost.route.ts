@@ -8,7 +8,7 @@ const router = Router()
 router.post('/:idUser/posts', validate(createPostSchema), PostController.createPostController)
 router.get('/:idUser/posts', PostController.getAllPostsController)
 router.delete('/:idUser/posts/:idPost', PostController.deletePostController)
-router.delete('/:idUser/posts/:idPost', PostController.deletePostController)
+router.patch('/:idUser/posts/:idPost', PostController.updatePostController)
 
 
 export default router;
