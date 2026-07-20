@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:3001/api
 
-@userId = 2
+@userId = 4
 @postId = 12
 
 ### =========================================
@@ -10,7 +10,7 @@ POST {{baseUrl}}/users/{{userId}}/posts
 Content-Type: application/json
 
 {
-  "title": "Harry Potter 5",
+  "title": "Brasilia, a cidade que nasceu do nada",
   "content": "Bla1 bla2 bbblaa",
   "category": "imaginação",
   "tags": ["sonho"]

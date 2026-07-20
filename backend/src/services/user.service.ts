@@ -1,7 +1,8 @@
 import {CreateUserDTO} from "../dtos/user.dto"
 import * as userRepository from "../repositories/user/user.repository"
 import { UserResponseDTO } from "../dtos/user.dto"
-import { removePasswordFromArray } from "../utils/remove-password-user"
+import bcrypt from "bcryptjs";
+
 
 export async function createUserService(data : CreateUserDTO) : Promise<UserResponseDTO> {
 
@@ -18,10 +19,12 @@ export async function createUserService(data : CreateUserDTO) : Promise<UserResp
     throw new Error("Usuário já existe!");
   }
 
+  const hashedPassword = await bcrypt.hash(data.password, 10);
+
   return await userRepository.createUserRepository({
     email: data.email,
     name: data.name,
-    password: data.password
+    password: hashedPassword
   })
 }
 

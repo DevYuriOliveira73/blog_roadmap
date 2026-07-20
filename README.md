@@ -1,66 +1,185 @@
-## Arquitetura em camadas do projeto
+# Blogging Platform API
 
-Este projeto segue o padrão de **arquitetura em camadas (layered architecture)**, adaptado para uma API REST em Node.js/Express com TypeScript, usando o padrão MVC como base e uma camada de Service e Repository para separar melhor as responsabilidades.
+API REST para gerenciamento de posts de blog, com autenticação de usuários. Baseado no projeto [Blogging Platform API](https://roadmap.sh/projects/blogging-platform-api) do roadmap.sh, estendido com autenticação e uma arquitetura em camadas mais robusta.
 
-O fluxo de uma requisição sempre segue a mesma direção:
+## Objetivo do projeto
+
+O foco principal deste projeto **não foi só entregar um CRUD de blog**, mas usar esse CRUD como pretexto para praticar uma arquitetura com melhor separação de responsabilidades — organizando o código em camadas bem definidas, cada uma com um único motivo para mudar.
+
+O fluxo de uma requisição sempre segue a mesma direção, de fora para dentro:
 
 ```
-Route → Controller → Service → Repository → Prisma → Database
+Controller → Service → Repository → Prisma → Database
 ```
 
-Cada camada só se comunica com a camada imediatamente abaixo dela. Isso garante baixo acoplamento: mudanças em uma camada não devem afetar as demais, desde que o contrato entre elas seja mantido.
+Essa estrutura foi escolhida já com um olho em arquiteturas mais avançadas, como **Clean Architecture**: o anel mais externo (Controller, que lida com HTTP) depende do anel logo abaixo (Service, que concentra a regra de negócio), que por sua vez depende do próximo anel (Repository, que abstrai o acesso a dados). Nenhuma camada pula direto para uma camada não adjacente, e a regra de negócio nunca depende de detalhes de infraestrutura como o Prisma ou o formato da requisição HTTP.
 
----
+Outro objetivo pontual do projeto foi aprender a usar o **Prisma** na prática — desde a modelagem do schema até a geração de migrations e a integração com PostgreSQL — já que era uma ferramenta nova neste momento de aprendizado.
 
-### 1. Controller (camada de entrada e saída)
+## Arquitetura
 
-O Controller é a camada mais externa da aplicação. Seu papel é lidar com a **entrada e saída das requisições HTTP**:
+| Camada | Responsabilidade |
+|---|---|
+| **Route** | Define qual URL + método HTTP aciona qual Controller |
+| **Controller** | Lida com entrada e saída HTTP: extrai dados da requisição, chama o Service, formata a resposta e o status code |
+| **Service** | Concentra a regra de negócio: validações de domínio, orquestração de operações, decisões de permissão |
+| **Repository** | Abstrai o acesso a dados, expondo métodos específicos (`findAll`, `create`, etc.) sem expor detalhes do ORM ao Service |
+| **Prisma / Database** | Persistência dos dados, via PostgreSQL |
 
-- Recebe a requisição (`req`), extraindo parâmetros, query strings e corpo (body).
-- Direciona a chamada para o Service correto, sem aplicar nenhuma regra de negócio.
-- Traduz o resultado (ou erro) devolvido pelo Service em uma resposta HTTP adequada, definindo o status code (200, 201, 400, 404, 500...) e o corpo da resposta.
+Camadas transversais que dão suporte às camadas principais, sem fazer parte da hierarquia acima:
 
-O Controller **não sabe** como uma tarefa é validada, nem como ela é salva no banco — ele só sabe conversar com o mundo externo (o cliente) e repassar a responsabilidade para dentro da aplicação.
+- **DTOs + Zod** — schemas de validação de entrada, aplicados via middleware antes da requisição alcançar o Controller
+- **Middlewares** — validação de payload e autenticação (JWT)
+- **Utils** — funções auxiliares reutilizáveis (ex: remoção de senha do retorno de usuário)
 
-### 2. Service (camada de regra de negócio)
+## Stack
 
-O Service concentra a **regra de negócio (RN)** da aplicação — tudo que faz sentido no domínio do problema, independente de tecnologia.
+- **Runtime:** Node.js, com [tsx](https://github.com/privatenumber/tsx) para execução direta de TypeScript
+- **Framework:** Express 5
+- **Linguagem:** TypeScript
+- **Gerenciador de pacotes:** Yarn
+- **Módulos:** ESM (`"type": "module"`)
+- **ORM:** Prisma
+- **Banco de dados:** PostgreSQL, via Docker Compose
+- **Validação:** Zod
+- **Autenticação:** JWT (`jsonwebtoken`) + hash de senha com `bcrypt`
 
-Aqui entram validações e decisões como:
+## Estrutura de pastas
 
-- Verificar se todos os atributos obrigatórios de uma requisição foram enviados.
-- Checar permissões e limites de negócio (ex: uma conta gratuita só pode criar até 10 artigos).
-- Orquestrar múltiplas operações quando uma ação de negócio envolve mais de um passo (ex: criar um pedido, debitar estoque e notificar o usuário).
+```
+src/
+├── app.ts                 # monta o Express: middlewares, rotas, error handler
+├── server.ts               # conecta ao banco e sobe o servidor
+│
+├── config/
+│   ├── env.ts               # variáveis de ambiente centralizadas
+│   └── database.ts          # conexão do Prisma com o banco
+│
+├── routes/
+│   ├── index.ts              # agrega todas as rotas
+│   ├── user.route.ts
+│   ├── post.route.ts
+│   └── auth.route.ts
+│
+├── controllers/
+│   ├── user/
+│   ├── post/
+│   └── auth/
+│
+├── services/
+│   ├── user/
+│   ├── post/
+│   └── auth/
+│
+├── repositories/
+│   ├── user/
+│   └── post/
+│
+├── dtos/                    # schemas Zod + tipos derivados
+│
+├── middleware/
+│   ├── validation.middleware.ts
+│   └── auth.middleware.ts
+│
+├── utils/
+│
+└── database/
+    └── prisma.ts
 
-O teste para saber se algo pertence ao Service é simples: *se essa regra existisse mesmo sem informática, ela ainda faria sentido para o dono do negócio?* Se sim, é regra de negócio e vai para o Service.
+prisma/
+└── schema.prisma
+```
 
-O Service não sabe nada sobre HTTP (não vê `req` nem `res`) e não sabe como os dados são persistidos — ele apenas chama o Repository correto para buscar ou salvar o que precisa.
+## Modelagem do banco
 
-### 3. Repository (camada de abstração de dados)
+```prisma
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  name     String
+  password String
+  posts    Post[]
+}
 
-O Repository é uma camada de **abstração** entre o Service e a forma real de acessar os dados. Ele expõe funções sob medida (`findAll`, `findById`, `create`, `update`, `delete`...) para que o Service consiga buscar e salvar dados sem precisar conhecer os detalhes de implementação.
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  subtitle  String?
+  content   String
+  category  String
+  tags      String[]
+  published Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+```
 
-Isso significa que:
+Todo `Post` está obrigatoriamente atrelado a um `User` (autor), via `authorId`.
 
-- O Service nunca importa o Prisma diretamente — ele sempre passa pelo Repository.
-- O Repository só se comunica com a camada imediatamente abaixo dele (Prisma/Database), nunca com outro Repository ou com um Service.
-- Se um dia a forma de persistência mudar (trocar Prisma por outro ORM, por exemplo), só o Repository precisa ser alterado — Service e Controller permanecem intactos.
+## Endpoints
 
-### 4. Prisma / Database (camada de persistência)
+### Autenticação
 
-É a camada mais interna, responsável por **guardar as informações** de fato. Neste projeto, isso é feito com **Prisma** como ORM, conectado a um banco **PostgreSQL**.
-
-Essa camada não tem conhecimento de regra de negócio nem de HTTP — ela apenas executa as operações de leitura e escrita que o Repository solicita, e devolve os dados brutos.
-
----
-
-### Resumo
-
-| Camada | Responsabilidade | Pergunta que responde |
+| Método | Rota | Descrição |
 |---|---|---|
-| Controller | Entrada e saída HTTP | O que entrou e o que devo devolver? |
-| Service | Regra de negócio | Isso é permitido? O que precisa acontecer? |
-| Repository | Abstração de acesso a dados | Como eu busco/salvo esse dado? |
-| Prisma/Database | Persistência | Onde o dado fica guardado? |
+| POST | `/api/auth/login` | Autentica usuário e retorna um JWT |
 
-Manter essa separação clara facilita testes (cada camada pode ser testada isoladamente), manutenção (mudanças ficam contidas em uma única camada) e a evolução do projeto conforme novas regras de negócio surgirem.
+### Usuários
+
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/api/users/register` | Cria um novo usuário (senha é hasheada com bcrypt) |
+| GET | `/api/users` | Lista todos os usuários (sem retornar senha) |
+| GET | `/api/users/search-email?email=termo` | Busca usuários por trecho do email |
+
+### Posts
+
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/api/users/:idUser/posts` | Cria um post vinculado a um usuário |
+| GET | `/api/users/:idUser/posts` | Lista os posts de um usuário |
+| GET | `/api/users/:idUser/posts/:idPost` | Busca um post específico |
+| PATCH | `/api/users/:idUser/posts/:idPost` | Atualiza um post |
+| DELETE | `/api/users/:idUser/posts/:idPost` | Remove um post |
+
+## Autenticação
+
+O fluxo de autenticação segue os seguintes passos:
+
+1. **Cadastro** — a senha é hasheada com `bcrypt` antes de ser salva; nunca é armazenada em texto puro.
+2. **Login** — compara a senha enviada com o hash salvo via `bcrypt.compare`; se válida, gera um JWT contendo o `id` do usuário.
+3. **Rotas protegidas** — um middleware de autenticação decodifica o JWT enviado no header `Authorization`, validando o token e disponibilizando o `id` do usuário autenticado para o restante da requisição.
+
+Por segurança, tanto "usuário não encontrado" quanto "senha incorreta" retornam a mesma mensagem de erro genérica no login, evitando que seja possível descobrir quais emails estão cadastrados.
+
+
+## Como rodar o projeto
+
+```bash
+# entrar no diretorio
+cd backend
+
+# instalar dependências
+yarn install
+
+# subir o banco de dados via Docker
+yarn docker:up
+
+# rodar as migrations
+npx prisma migrate dev
+
+# subir o servidor em modo desenvolvimento
+yarn dev
+
+# Pode usar os arquivos que estão
+- backend/REST_Client
+```
+
+## Melhorias futuras
+1. Melhorar a robustez da autenticação (refresh token, expiração configurável, revogação de token)
+1. Trabalhar a centralização e apresentação dos erros (hierarquia de classes de erro customizadas)
+1. Trocar :idUser na URL das rotas de post pelo id extraído do JWT, evitando que um usuário crie posts em nome de outro
+1. Adicionar paginação em GET /posts e GET /users
+1. Implementar testes automatizados (unitários nos Services, integração nos endpoints)

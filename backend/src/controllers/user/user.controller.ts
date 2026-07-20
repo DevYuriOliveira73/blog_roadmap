@@ -1,6 +1,7 @@
 import {Request, Response} from "express"
-import {CreateUserDTO} from "../../dtos/user.dto"
+import {CreateUserDTO, createUserSchema} from "../../dtos/user.dto"
 import * as userService from "../../services/user.service"
+
 
 export async function createUserController(req: Request, res: Response) {
 

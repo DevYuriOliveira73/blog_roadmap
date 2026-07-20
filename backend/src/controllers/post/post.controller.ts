@@ -9,7 +9,7 @@ export async function createPostController(req: Request, res: Response) {
 
     const post = await postService.createPostService(req.body as CreatePostDTO)
 
-    res.status(201).json({message: `Post ${post.title} created successfully`, post})
+    res.status(201).json({message: `Post "${post.title}" created successfully`, post})
 
   } catch (error) {
 
@@ -89,15 +89,3 @@ export async function getPostByIdController(req: Request, res: Response) {
 
   }
 }
-
-// export async function searchByEmailLikeController(req: Request, res: Response) {
-//   try {
-//     const { email : term } = req.query;
-//     const users = await userService.searchByEmailLikeService(term as string);
-//     res.status(200).json(users);
-//   } catch (error) {
-
-//     res.status(400).json({message: "Error searching user", error})
-
-//   }
-// }
