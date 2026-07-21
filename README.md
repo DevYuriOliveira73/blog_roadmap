@@ -138,11 +138,11 @@ Todo `Post` está obrigatoriamente atrelado a um `User` (autor), via `authorId`.
 
 | Método | Rota | Descrição |
 |---|---|---|
-| POST | `/api/users/:idUser/posts` | Cria um post vinculado a um usuário |
-| GET | `/api/users/:idUser/posts` | Lista os posts de um usuário |
-| GET | `/api/users/:idUser/posts/:idPost` | Busca um post específico |
-| PATCH | `/api/users/:idUser/posts/:idPost` | Atualiza um post |
-| DELETE | `/api/users/:idUser/posts/:idPost` | Remove um post |
+| POST | `/api/user/posts` | Cria um post vinculado a um usuário |
+| GET | `/api/user/posts` | Lista os posts de um usuário |
+| GET | `/api/user/posts/:idPost` | Busca um post específico |
+| PATCH | `/api/user/posts/:idPost` | Atualiza um post |
+| DELETE | `/api/user/posts/:idPost` | Remove um post |
 
 ## Autenticação
 
@@ -178,8 +178,9 @@ yarn dev
 ```
 
 ## Melhorias futuras
+
 1. Melhorar a robustez da autenticação (refresh token, expiração configurável, revogação de token)
 1. Trabalhar a centralização e apresentação dos erros (hierarquia de classes de erro customizadas)
-1. Trocar :idUser na URL das rotas de post pelo id extraído do JWT, evitando que um usuário crie posts em nome de outro
-1. Adicionar paginação em GET /posts e GET /users
+1. Adicionar paginação em `GET /posts` e `GET /user`
 1. Implementar testes automatizados (unitários nos Services, integração nos endpoints)
+1. Autorização por papéis (roles/permissions), já que hoje qualquer usuário autenticado pode fazer qualquer operação
