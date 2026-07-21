@@ -1,7 +1,6 @@
 import {Request, Response} from "express"
 import {CreatePostDTO} from "../../dtos/post.dto"
 import * as postService from "../../services/post.service"
-import { getParams } from "../../utils/getParams"
 
 export async function createPostController(req: Request, res: Response) {
 

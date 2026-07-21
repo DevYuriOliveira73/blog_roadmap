@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodType } from 'zod';
-import { getParams } from '../utils/getParams';
 
 export function validate(schema: ZodType) {
   return (req: Request, res: Response, next: NextFunction) => {
