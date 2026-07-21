@@ -3,22 +3,22 @@ import {CreateUserDTO, createUserSchema} from "../../dtos/user.dto"
 import * as userService from "../../services/user.service"
 
 
-export async function createUserController(req: Request, res: Response) {
+// export async function createUserController(req: Request, res: Response) {
 
-  try {
+//   try {
 
-    const {email,name, password} = req.body as CreateUserDTO
-    const user = await userService.createUserService({email, name, password})
+//     const {email,name, password} = req.body as CreateUserDTO
+//     const user = await userService.createUserService({email, name, password})
 
-    res.status(201).json({message: `User ${user.name} created successfully`, user})
+//     res.status(201).json({message: `User ${user.name} created successfully`, user})
 
-  } catch (error) {
+//   } catch (error) {
 
-    res.status(400).json({message: "Error creating user", error})
+//     res.status(400).json({message: "Error creating user", error})
 
-  }
+//   }
 
-}
+// }
 
 export async function getAllUsersController(req: Request, res: Response) {
   try {

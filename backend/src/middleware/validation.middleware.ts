@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodType } from 'zod';
+import { getParams } from '../utils/getParams';
 
 export function validate(schema: ZodType) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const idUser = req.params.idUser;
-    const idUserNumber = Number(idUser);
+    const { idUser } = getParams(req);
 
-    const requestBody = { ...req.body, authorId: idUserNumber };
+    const requestBody = { ...req.body, authorId: idUser };
     const result = schema.safeParse(requestBody);
 
     if (!result.success) {

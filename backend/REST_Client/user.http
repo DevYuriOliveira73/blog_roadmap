@@ -2,22 +2,14 @@
 @term = .com
 
 ### Criar usuário
-POST {{baseUrl}}/users/register
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "email": "brutos1.jj@apple.com",
-  "name": "Vitor Brutos",
-  "password": "123456"
+  "email": "brasillia.jj@apple.com",
+  "name": "MIGUEL vITOR",
+  "password": "15ASDFF6"
 }
-
-### Listar usuários
-GET {{baseUrl}}/users
-
-
-### Buscar usuários por trecho de email
-GET {{baseUrl}}/users/search-email
-  ?email={{term}}
 
 ### Login
 POST {{baseUrl}}/auth/login
@@ -27,3 +19,13 @@ Content-Type: application/json
   "email": "brutos1.jj@apple.com",
   "password": "123456"
 }
+
+
+### Listar usuários
+GET {{baseUrl}}/users
+
+
+### Buscar usuários por trecho de email
+GET {{baseUrl}}/users/search-email
+  ?email={{term}}
+

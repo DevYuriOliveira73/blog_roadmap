@@ -4,29 +4,29 @@ import { UserResponseDTO } from "../dtos/user.dto"
 import bcrypt from "bcryptjs";
 
 
-export async function createUserService(data : CreateUserDTO) : Promise<UserResponseDTO> {
+// export async function createUserService(data : CreateUserDTO) : Promise<UserResponseDTO> {
 
-  if (!data.email || !data.password) {
-    throw new Error("Email e senha são obrigatórios");
-  }
+//   if (!data.email || !data.password) {
+//     throw new Error("Email e senha são obrigatórios");
+//   }
 
-  if (!data.name) {
-    throw new Error("Nome é obrigatório!");
-  }
+//   if (!data.name) {
+//     throw new Error("Nome é obrigatório!");
+//   }
 
-  const existingUser = await userRepository.findByEmail(data.email);
-  if (existingUser) {
-    throw new Error("Usuário já existe!");
-  }
+//   const existingUser = await userRepository.findByEmail(data.email);
+//   if (existingUser) {
+//     throw new Error("Usuário já existe!");
+//   }
 
-  const hashedPassword = await bcrypt.hash(data.password, 10);
+//   const hashedPassword = await bcrypt.hash(data.password, 10);
 
-  return await userRepository.createUserRepository({
-    email: data.email,
-    name: data.name,
-    password: hashedPassword
-  })
-}
+//   return await userRepository.createUserRepository({
+//     email: data.email,
+//     name: data.name,
+//     password: hashedPassword
+//   })
+// }
 
 export async function getAllUsersService(): Promise<UserResponseDTO[] | null> {
   const users = await userRepository.getAllUsersRepository();
