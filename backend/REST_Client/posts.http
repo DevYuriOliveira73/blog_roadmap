@@ -1,17 +1,22 @@
 @baseUrl = http://localhost:3001/api
 
-@userId = 4
-@postId = 12
+@userId = 7
+@postId = 20
+
+
+@tokenJWT = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsImlhdCI6MTc4NDY0NDc4OSwiZXhwIjoxNzg0NzMxMTg5fQ.M3aS7wBSvi2Wb-0Kz8qaVTBGC7xPBsOeAWTZAzQ__p8
 
 ### =========================================
 ### POSTS - Criar post (aninhado no usuário)
 ### =========================================
-POST {{baseUrl}}/users/{{userId}}/posts
+POST {{baseUrl}}/user/posts
 Content-Type: application/json
+Authorization:  {{tokenJWT}}
+
 
 {
-  "title": "Brasilia, a cidade que nasceu do nada",
-  "content": "Bla1 bla2 bbblaa",
+  "title": "E nesse dia eu aprendi que a vida é feita de escolhas",
+  "content": "As escolhas do homem são o que definem o seu caráter. E a vida é feita de escolhas, e cada escolha que fazemos nos leva a um caminho diferente. E é nesse caminho que encontramos a nossa verdadeira essência.",
   "category": "imaginação",
   "tags": ["sonho"]
 }
@@ -19,21 +24,24 @@ Content-Type: application/json
 ### =========================================
 ### GET - Listar todos
 ### =========================================
-GET {{baseUrl}}/users/{{userId}}/posts
-
+GET {{baseUrl}}/user/posts
+Authorization:  {{tokenJWT}}
 
 
 ### =========================================
 ### DELETE - Deletar
 ### =========================================
-DELETE {{baseUrl}}/users/{{userId}}/posts/{{postId}}
+DELETE {{baseUrl}}/user/posts/{{postId}}
+Authorization:  {{tokenJWT}}
+
 
 
 ### =========================================
 ### PATCH - Atualizar (PUT - substitui o recurso inteiro)
 ### =========================================
-PATCH {{baseUrl}}/users/{{userId}}/posts/{{postId}}
+PATCH {{baseUrl}}/user/posts/{{postId}}
 Content-Type: application/json
+Authorization:  {{tokenJWT}}
 
 {
   "title": "Harry Potter 3 (editado)",
@@ -45,38 +53,7 @@ Content-Type: application/json
 ### =========================================
 ### GET - Buscar por id do post (aninhado no usuário)
 ### =========================================
-GET {{baseUrl}}/users/{{userId}}/posts/{{postId}}
+GET {{baseUrl}}/user/posts/{{postId}}
+Authorization:  {{tokenJWT}}
 
 
-
-
-
-### =========================================
-### POSTS - Buscar por termo (query param)
-### =========================================
-GET {{baseUrl}}/posts?term=typescript
-
-### =========================================
-### POSTS - Buscar por id
-### =========================================
-GET {{baseUrl}}/posts/{{postId}}
-
-
-
-### =========================================
-### POSTS - Casos de erro (pra testar a validação Zod)
-### =========================================
-
-### title vazio -> deve retornar 400
-POST {{baseUrl}}/users/{{userId}}/posts
-Content-Type: application/json
-
-{
-  "title": "",
-  "content": "Conteúdo válido",
-  "category": "tecnologia",
-  "tags": []
-}
-
-### id inexistente -> deve retornar 404
-GET {{baseUrl}}/posts/999999

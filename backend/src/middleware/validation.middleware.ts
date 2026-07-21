@@ -4,9 +4,9 @@ import { getParams } from '../utils/getParams';
 
 export function validate(schema: ZodType) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const { idUser } = getParams(req);
+    const userId = req.metadata.userId
 
-    const requestBody = { ...req.body, authorId: idUser };
+    const requestBody = { ...req.body, authorId: userId };
     const result = schema.safeParse(requestBody);
 
     if (!result.success) {

@@ -1,5 +1,6 @@
 // dtos/auth.dto.ts
 import { z } from "zod";
+import { JwtPayload } from "jsonwebtoken"
 
 export const loginSchema = z.object({
   email: z.email("Email inválido"),
@@ -15,3 +16,9 @@ export const registerSchema = z.object({
 export type LoginDTO = z.infer<typeof loginSchema>;
 export type RegisterDTO = z.infer<typeof registerSchema>;
 
+
+
+
+export interface AuthTokenPayload extends JwtPayload {
+  userId: number;
+}

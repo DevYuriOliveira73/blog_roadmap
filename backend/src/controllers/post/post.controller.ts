@@ -21,9 +21,9 @@ export async function createPostController(req: Request, res: Response) {
 
 export async function getAllPostsController(req: Request, res: Response) {
   try {
-    const { idUser } = getParams(req);
+    const userId = req.metadata.userId
 
-    const posts = await postService.getAllPostsService(idUser)
+    const posts = await postService.getAllPostsService(userId!)
 
     res.status(200).json(posts)
 
@@ -35,14 +35,16 @@ export async function getAllPostsController(req: Request, res: Response) {
 
 export async function deletePostController(req: Request, res: Response) {
   try {
-    const { idUser, idPost } = getParams(req);
+    const userId = req.metadata.userId
+
+    const idPost = req.params.idPost ? Number(req.params.idPost) : undefined;
 
     if (idPost === undefined) {
       res.status(400).json({message: "idPost is required"})
       return
     }
 
-    const post = await postService.deletePostService(idUser, idPost)
+    const post = await postService.deletePostService(userId!, idPost)
 
     res.status(200).json({message: `Post ${post.title} deleted successfully`, post})
   } catch (error) {
@@ -52,14 +54,15 @@ export async function deletePostController(req: Request, res: Response) {
 
 export async function updatePostController(req: Request, res: Response) {
   try {
-    const { idUser, idPost } = getParams(req);
+    const userId = req.metadata.userId
+    const idPost = req.params.idPost ? Number(req.params.idPost) : undefined;
 
     if (idPost === undefined) {
       res.status(400).json({message: "idPost is required"})
       return
     }
 
-    const post = await postService.updatePostService(idUser, idPost, req.body);
+    const post = await postService.updatePostService(userId!, idPost, req.body);
 
     res.status(200).json({message: `Post ${post.title} updated successfully`, post});
 
@@ -72,14 +75,15 @@ export async function updatePostController(req: Request, res: Response) {
 
 export async function getPostByIdController(req: Request, res: Response) {
   try {
-    const { idUser, idPost } = getParams(req);
+    const userId = req.metadata.userId
+    const idPost = req.params.idPost ? Number(req.params.idPost) : undefined;
 
     if (idPost === undefined) {
       res.status(400).json({message: "idPost is required"})
       return
     }
 
-    const post = await postService.getPostByIdService(idUser, idPost);
+    const post = await postService.getPostByIdService(userId!, idPost);
 
     res.status(200).json(post);
 

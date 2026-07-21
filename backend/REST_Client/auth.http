@@ -1,0 +1,23 @@
+@baseUrl = http://localhost:3001/api
+@term = .com
+
+@senhaFixa = "15ASDFF6"
+
+### Criar usuário
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "abc@gmail.com",
+  "name": "MIGUEL7 vITOR",
+  "password": {{senhaFixa}}
+}
+
+### Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "abc@gmail.com",
+  "password": {{senhaFixa}}
+}

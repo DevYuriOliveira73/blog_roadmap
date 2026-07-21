@@ -1,26 +1,6 @@
 @baseUrl = http://localhost:3001/api
 @term = .com
 
-### Criar usuário
-POST {{baseUrl}}/auth/register
-Content-Type: application/json
-
-{
-  "email": "brasillia.jj@apple.com",
-  "name": "MIGUEL vITOR",
-  "password": "15ASDFF6"
-}
-
-### Login
-POST {{baseUrl}}/auth/login
-Content-Type: application/json
-
-{
-  "email": "brutos1.jj@apple.com",
-  "password": "123456"
-}
-
-
 ### Listar usuários
 GET {{baseUrl}}/users
 
