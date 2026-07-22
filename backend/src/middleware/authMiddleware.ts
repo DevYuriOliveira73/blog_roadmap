@@ -22,25 +22,25 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
   const token = authHeader.split(" ")[1];
 
   try {
-  const { userId } = jwt.verify(token!, env.JWT_SECRET) as AuthTokenPayload;
+    const { userId } = jwt.verify(token!, env.JWT_SECRET) as AuthTokenPayload;
 
-  if (!userId) {
-    return res.status(401).json({ message: "Token inválido" });
+    if (!userId) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
+
+    req.metadata = { userId: Number(userId) };
+
+    next();
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      return res.status(401).json({ message: "Token expirado" });
+    }
+
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
+
+    console.error(error);
+    return res.status(500).json({ message: "Erro ao validar token" });
   }
-
-  req.metadata = { userId: Number(userId) };
-
-  next();
-} catch (error) {
-  if (error instanceof jwt.TokenExpiredError) {
-    return res.status(401).json({ message: "Token expirado" });
-  }
-
-  if (error instanceof jwt.JsonWebTokenError) {
-    return res.status(401).json({ message: "Token inválido" });
-  }
-
-  console.error(error);
-  return res.status(500).json({ message: "Erro ao validar token" });
-}
 }

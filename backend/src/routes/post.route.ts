@@ -2,7 +2,6 @@ import { Router } from 'express'
 import * as PostController from '../controllers/post/post.controller'
 import { createPostSchema } from '../dtos/post.dto';
 import { validate } from '../middleware/validation.middleware';
-import { authMiddleware } from '../middleware/authMiddleware';
 
 const router = Router()
 
